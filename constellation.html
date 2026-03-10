@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星座运势 - 天道元一</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #FFD700;
+            --primary-crimson: #C41E3A;
+            --dark-bg: #0a0a0f;
+            --card-bg: rgba(20, 20, 30, 0.95);
+            --text-light: #f0f0f0;
+            --text-muted: #888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary-gold);
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--primary-gold);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+        }
+
+        .constellation-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .constellation-item {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .constellation-item:hover, .constellation-item.selected {
+            border-color: var(--primary-gold);
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .constellation-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .constellation-name {
+            font-size: 1.1rem;
+            color: var(--primary-gold);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .constellation-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .form-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: var(--primary-gold);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .price-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .price-option {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .price-option:hover, .price-option.selected {
+            border-color: var(--primary-gold);
+            background: rgba(255, 215, 0, 0.15);
+        }
+
+        .price-amount {
+            font-size: 1.3rem;
+            color: var(--primary-gold);
+            font-weight: 700;
+        }
+
+        .price-meaning {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary-gold), #FFA500);
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .result-section {
+            display: none;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .result-section.active {
+            display: block;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .result-name {
+            font-size: 1.8rem;
+            color: var(--primary-gold);
+            font-weight: bold;
+        }
+
+        .result-date {
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .fortune-overview {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .fortune-star {
+            text-align: center;
+        }
+
+        .star-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .stars {
+            color: var(--primary-gold);
+            font-size: 1.5rem;
+        }
+
+        .fortune-content {
+            margin-top: 30px;
+        }
+
+        .fortune-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-gold);
+        }
+
+        .fortune-section h3 {
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .fortune-section p {
+            line-height: 1.8;
+            color: var(--text-light);
+        }
+
+        .lucky-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .lucky-item {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .lucky-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .lucky-value {
+            color: var(--primary-gold);
+            font-weight: bold;
+        }
+
+        .love-match {
+            margin-top: 15px;
+        }
+
+        .match-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .match-score {
+            color: var(--primary-gold);
+            font-weight: bold;
+            min-width: 50px;
+        }
+
+        .match-name {
+            flex: 1;
+        }
+
+        .match-bar {
+            width: 100px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .match-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-gold), #FFA500);
+            border-radius: 4px;
+        }
+
+        .paywall {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(196, 30, 58, 0.1));
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .paywall h3 {
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .constellation-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .price-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .lucky-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">← 返回首页</a>
+            <h1>星座运势</h1>
+            <p class="subtitle">每日、每周、每月运势，爱情事业财运全解析</p>
+        </header>
+
+        <div class="form-card" id="inputForm">
+            <form id="constellationForm">
+                <div class="form-group">
+                    <label>选择您的星座</label>
+                    <div class="constellation-grid">
+                        <div class="constellation-item" onclick="selectConstellation('白羊座', '♈')">
+                            <div class="constellation-icon">♈</div>
+                            <div class="constellation-name">白羊座</div>
+                            <div class="constellation-date">3.21-4.19</div>
+                        </div>
+                        <div class="constellation-item" onclick="selectConstellation('金牛座', '♉')">
+                            <div class="constellation-icon">♉</div>
+                            <div class="constellation-name">金牛座</div>
+                            <div class="constellation-date">4.20-5.20</div>
+                        </div>
+                        <div class="constellation-item" onclick="selectConstellation('双子座', '♊')">
+                            <div class="constellation-icon">♊</div>
+                            <div class="constellation-name">双子座</div>
+                            <div class="constellation-date">5.21-6.21</div>
+                        </div>
+                        <div class="constellation-item" onclick="selectConstellation('巨蟹座', '♋')">
+                            <div class="constellation-icon">♋</div>
+                            <div class="constellation-name">巨蟹座</div>
+                            <div class="constellation-date">6.22-7.22</div>
+                        </div>
+                        <div class="constellation-item" onclick="selectConstellation('狮子座', '♌')">
+                            <div class="constellation-icon">♌</div>
+                            <div class="constellation-name">狮子座</div>
+                            <div class="constellation-date">7.23-8.22</div>
+                        </div>
+                        <div class="constellation-item" onclick="selectConstellation('处女座', '♍')">
+                            <div class="constellation-icon">♍</div>
+                            <div class="constellation-name">处女座</div>
+                            <div class="constellation-date">8.23-9.22</div>
+                        </div>
+                        <div class="constellation-item" onclick="selectConstellation('天秤座', '♎')">
+                            <div class="constellation-icon">♎</div>
+                            <div class="constellation-name">天秤座</div>
+                            <div class="constellation-date">9.23-10.23</div>
+                        </div>
+                        <div class="constellation-item" onclick="selectConstellation('天蝎座', '♏')">
+                            <div class="constellation-icon">♏</div>
+                            <div class="constellation-name">天蝎座</div>
+                            <div class="constellation-date">10.24-11.22</div>
+                        </div>
+                        <div class="constellation-item" onclick="selectConstellation('射手座', '♐')">
+                            <div class="constellation-icon">♐</div>
+                            <div class="constellation-name">射手座</div>
+                            <div class="constellation-date">11.23-12.21</div>
+                        </div>
+                        <div class="constellation-item" onclick="selectConstellation('摩羯座', '♑')">
+                            <div class="constellation-icon">♑</div>
+                            <div class="constellation-name">摩羯座</div>
+                            <div class="constellation-date">12.22-1.19</div>
+                        </div>
+                        <div class="constellation-item" onclick="selectConstellation('水瓶座', '♒')">
+                            <div class="constellation-icon">♒</div>
+                            <div class="constellation-name">水瓶座</div>
+                            <div class="constellation-date">1.20-2.18</div>
+                        </div>
+                        <div class="constellation-item" onclick="selectConstellation('双鱼座', '♓')">
+                            <div class="constellation-icon">♓</div>
+                            <div class="constellation-name">双鱼座</div>
+                            <div class="constellation-date">2.19-3.20</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="constellation" required>
+                    <input type="hidden" id="constellationIcon" required>
+                </div>
+
+                <div class="form-group">
+                    <label>选择时间范围</label>
+                    <select id="timeRange" required>
+                        <option value="today">今日运势</option>
+                        <option value="week">本周运势</option>
+                        <option value="month">本月运势</option>
+                        <option value="year">年度运势</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>🙏 随喜付费</label>
+                    <div class="price-options">
+                        <div class="price-option" onclick="selectPrice(0.88)">
+                            <div class="price-amount">¥0.88</div>
+                            <div class="price-meaning">发财</div>
+                        </div>
+                        <div class="price-option selected" onclick="selectPrice(8.8)">
+                            <div class="price-amount">¥8.8</div>
+                            <div class="price-meaning">顺利</div>
+                        </div>
+                        <div class="price-option" onclick="selectPrice(88)">
+                            <div class="price-amount">¥88</div>
+                            <div class="price-meaning">大发</div>
+                        </div>
+                        <div class="price-option" onclick="selectPrice(888)">
+                            <div class="price-amount">¥888</div>
+                            <div class="price-meaning">暴富</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="selectedPrice" value="8.8">
+                </div>
+
+                <button type="submit" class="submit-btn">查看运势</button>
+            </form>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="result-header">
+                <div class="result-icon" id="resultIcon">♈</div>
+                <div class="result-name" id="resultName">白羊座</div>
+                <div class="result-date">3月21日 - 4月19日</div>
+            </div>
+
+            <div class="fortune-overview">
+                <div class="fortune-star">
+                    <div class="star-label">综合运势</div>
+                    <div class="stars" id="overallStars">⭐⭐⭐⭐⭐</div>
+                </div>
+                <div class="fortune-star">
+                    <div class="star-label">爱情运势</div>
+                    <div class="stars" id="loveStars">⭐⭐⭐⭐</div>
+                </div>
+                <div class="fortune-star">
+                    <div class="star-label">事业运势</div>
+                    <div class="stars" id="careerStars">⭐⭐⭐⭐⭐</div>
+                </div>
+                <div class="fortune-star">
+                    <div class="star-label">财富运势</div>
+                    <div class="stars" id="wealthStars">⭐⭐⭐⭐</div>
+                </div>
+            </div>
+
+            <div class="fortune-content">
+                <div class="fortune-section">
+                    <h3>💕 爱情运势</h3>
+                    <p id="loveFortune">今日桃花运旺盛，单身者有机会遇到心仪对象。有伴侣者感情甜蜜，适合约会增进感情。建议多表达自己的感受，让对方更了解你。</p>
+                    <div class="love-match">
+                        <div class="match-item">
+                            <span class="match-score">98%</span>
+                            <span class="match-name">狮子座</span>
+                            <div class="match-bar"><div class="match-fill" style="width: 98%"></div></div>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-score">92%</span>
+                            <span class="match-name">射手座</span>
+                            <div class="match-bar"><div class="match-fill" style="width: 92%"></div></div>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-score">85%</span>
+                            <span class="match-name">双子座</span>
+                            <div class="match-bar"><div class="match-fill" style="width: 85%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fortune-section">
+                    <h3>💼 事业运势</h3>
+                    <p id="careerFortune">工作上思路清晰，创意迸发。适合提出新方案，容易获得领导认可。团队合作顺利，同事关系融洽。把握机会展现自己的才能。</p>
+                </div>
+
+                <div class="fortune-section">
+                    <h3>💰 财富运势</h3>
+                    <p id="wealthFortune">财运平稳，正财收入稳定。偏财方面有小幅进账，但不宜大额投资。建议理性消费，做好理财规划。今日适合整理财务状况。</p>
+                </div>
+
+                <div class="fortune-section">
+                    <h3>🍀 幸运指南</h3>
+                    <div class="lucky-info">
+                        <div class="lucky-item">
+                            <div class="lucky-label">幸运数字</div>
+                            <div class="lucky-value" id="luckyNumber">6、9</div>
+                        </div>
+                        <div class="lucky-item">
+                            <div class="lucky-label">幸运颜色</div>
+                            <div class="lucky-value" id="luckyColor">红色、金色</div>
+                        </div>
+                        <div class="lucky-item">
+                            <div class="lucky-label">幸运方位</div>
+                            <div class="lucky-value" id="luckyDirection">东南</div>
+                        </div>
+                        <div class="lucky-item">
+                            <div class="lucky-label">速配星座</div>
+                            <div class="lucky-value" id="luckyMatch">狮子座</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fortune-section">
+                    <h3>⚠️ 今日提醒</h3>
+                    <p id="warning">今日虽有贵人相助，但不宜过于张扬。注意控制情绪，避免与人发生争执。健康方面注意休息，不要熬夜。</p>
+                </div>
+            </div>
+
+            <div class="paywall" id="paywall">
+                <h3>🎁 免费体验版</h3>
+                <p>您正在使用免费体验，已显示今日星座运势</p>
+                <div style="background: rgba(76, 175, 80, 0.1); border: 1px solid #4CAF50; border-radius: 10px; padding: 15px; margin: 15px 0;">
+                    <p style="color: #4CAF50; margin: 0;">✓ 今日运势（免费）</p>
+                    <p style="color: #4CAF50; margin: 5px 0 0 0;">✓ 爱情配对（免费）</p>
+                    <p style="color: var(--text-muted); margin: 5px 0 0 0;">✗ 明日运势（VIP）</p>
+                    <p style="color: var(--text-muted); margin: 5px 0 0 0;">✗ 本周运势（VIP）</p>
+                    <p style="color: var(--text-muted); margin: 5px 0 0 0;">✗ 年度运势（VIP）</p>
+                </div>
+                <p style="margin-top: 15px;">升级VIP查看明日、本周、本月、年度详细运势</p>
+                <button class="submit-btn" onclick="showPayment()">升级VIP查看完整版</button>
+                <p style="margin-top: 15px; color: var(--text-muted); font-size: 0.9rem;">🙏 随喜付费，心诚则灵</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectConstellation(name, icon) {
+            document.getElementById('constellation').value = name;
+            document.getElementById('constellationIcon').value = icon;
+            document.querySelectorAll('.constellation-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+        }
+
+        function selectPrice(price) {
+            document.getElementById('selectedPrice').value = price;
+            document.querySelectorAll('.price-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+        }
+
+        const fortuneData = {
+            '白羊座': {
+                love: '今日桃花运旺盛，单身者有机会遇到心仪对象。有伴侣者感情甜蜜，适合约会增进感情。',
+                career: '工作上积极主动，容易获得领导赏识。适合开展新项目，把握机会展现才能。',
+                wealth: '财运不错，有意外之财的可能。但投资需谨慎，避免冲动消费。',
+                luckyNumber: '6、9',
+                luckyColor: '红色、金色',
+                luckyDirection: '东南',
+                luckyMatch: '狮子座'
+            },
+            '金牛座': {
+                love: '感情稳定，适合与伴侣深入交流。单身者可能需要更多耐心，缘分需要时间。',
+                career: '工作踏实认真，容易获得同事信任。适合处理细节工作，稳扎稳打。',
+                wealth: '财运稳定，正财收入可观。适合储蓄理财，不宜冒险投资。',
+                luckyNumber: '2、8',
+                luckyColor: '绿色、粉色',
+                luckyDirection: '东北',
+                luckyMatch: '处女座'
+            },
+            '双子座': {
+                love: '社交运旺盛，有机会结识新朋友。感情中需要更多沟通，避免误会。',
+                career: '思维活跃，创意无限。适合头脑风暴，提出新想法。',
+                wealth: '财运起伏较大，注意收支平衡。避免冲动购物。',
+                luckyNumber: '3、7',
+                luckyColor: '黄色、蓝色',
+                luckyDirection: '西北',
+                luckyMatch: '天秤座'
+            }
+        };
+
+        document.getElementById('constellationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('constellation').value;
+            const icon = document.getElementById('constellationIcon').value;
+            
+            if (!name) {
+                alert('请选择您的星座');
+                return;
+            }
+
+            // 显示结果
+            document.getElementById('resultIcon').textContent = icon;
+            document.getElementById('resultName').textContent = name;
+
+            // 生成随机星级
+            const stars = ['⭐⭐⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐⭐⭐', '⭐⭐⭐⭐'];
+            document.getElementById('overallStars').textContent = stars[Math.floor(Math.random() * stars.length)];
+            document.getElementById('loveStars').textContent = stars[Math.floor(Math.random() * stars.length)];
+            document.getElementById('careerStars').textContent = stars[Math.floor(Math.random() * stars.length)];
+            document.getElementById('wealthStars').textContent = stars[Math.floor(Math.random() * stars.length)];
+
+            // 更新运势内容
+            const data = fortuneData[name] || fortuneData['白羊座'];
+            document.getElementById('loveFortune').textContent = data.love;
+            document.getElementById('careerFortune').textContent = data.career;
+            document.getElementById('wealthFortune').textContent = data.wealth;
+            document.getElementById('luckyNumber').textContent = data.luckyNumber;
+            document.getElementById('luckyColor').textContent = data.luckyColor;
+            document.getElementById('luckyDirection').textContent = data.luckyDirection;
+            document.getElementById('luckyMatch').textContent = data.luckyMatch;
+
+            document.getElementById('inputForm').style.display = 'none';
+            document.getElementById('resultSection').classList.add('active');
+        });
+
+        function showPayment() {
+            const price = document.getElementById('selectedPrice').value;
+            alert(`感谢您的随喜支持！\n\n支付金额：¥${price}\n\n请联系客服完成支付：\n电话：180-5812-5388\n微信：80506070`);
+        }
+    </script>
+</body>
+</html>

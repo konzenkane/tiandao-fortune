@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>姻缘配对 - 天道元一</title>
+    <style>
+        :root { --gold: #FFD700; --dark: #0a0a0f; --text: #f0f0f0; --muted: #888; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "Microsoft YaHei", serif; background: var(--dark); color: var(--text); }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; padding: 30px 0; border-bottom: 2px solid var(--gold); }
+        .back { color: var(--gold); text-decoration: none; display: block; margin-bottom: 20px; }
+        h1 { color: var(--gold); font-size: 2rem; }
+        .form-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,215,0,0.3); border-radius: 20px; padding: 30px; margin: 30px 0; }
+        .form-group { margin-bottom: 25px; }
+        label { display: block; color: var(--gold); margin-bottom: 10px; font-size: 1.1rem; }
+        input, select { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,215,0,0.3); border-radius: 10px; color: var(--text); font-size: 1rem; }
+        .person-title { color: var(--gold); font-size: 1.3rem; margin: 30px 0 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,215,0,0.3); }
+        .submit-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--gold), #FFA500); color: #000; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        .result-section { display: none; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,215,0,0.3); border-radius: 20px; padding: 30px; margin-top: 30px; }
+        .result-section.active { display: block; }
+        .match-score { text-align: center; padding: 30px; background: rgba(255,215,0,0.1); border-radius: 15px; margin-bottom: 30px; }
+        .score-number { font-size: 4rem; color: var(--gold); font-weight: bold; }
+        .score-text { color: var(--muted); margin-top: 10px; }
+        .analysis-section { margin: 20px 0; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+        .analysis-section h3 { color: var(--gold); margin-bottom: 10px; }
+        .analysis-section p { color: var(--muted); line-height: 1.8; }
+        .paywall { text-align: center; padding: 30px; background: rgba(255,215,0,0.1); border-radius: 15px; margin-top: 30px; }
+        .paywall h3 { color: var(--gold); margin-bottom: 15px; }
+        .btn-vip { background: linear-gradient(135deg, var(--gold), #FFA500); color: #000; padding: 15px 40px; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+        footer { text-align: center; padding: 40px 0; border-top: 1px solid rgba(255,215,0,0.2); color: var(--muted); margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back">← 返回首页</a>
+            <h1>💕 姻缘配对</h1>
+            <p style="color: var(--muted); margin-top: 10px;">八字合婚 · 星座配对 · 缘分分析</p>
+        </header>
+
+        <div class="form-card" id="inputForm">
+            <form id="matchingForm">
+                <div class="person-title">👤 男方信息</div>
+                <div class="form-group">
+                    <label>出生日期</label>
+                    <input type="date" id="maleDate" required>
+                </div>
+                <div class="form-group">
+                    <label>生肖</label>
+                    <select id="maleZodiac" required>
+                        <option value="">请选择</option>
+                        <option value="鼠">鼠</option>
+                        <option value="牛">牛</option>
+                        <option value="虎">虎</option>
+                        <option value="兔">兔</option>
+                        <option value="龙">龙</option>
+                        <option value="蛇">蛇</option>
+                        <option value="马">马</option>
+                        <option value="羊">羊</option>
+                        <option value="猴">猴</option>
+                        <option value="鸡">鸡</option>
+                        <option value="狗">狗</option>
+                        <option value="猪">猪</option>
+                    </select>
+                </div>
+
+                <div class="person-title">👤 女方信息</div>
+                <div class="form-group">
+                    <label>出生日期</label>
+                    <input type="date" id="femaleDate" required>
+                </div>
+                <div class="form-group">
+                    <label>生肖</label>
+                    <select id="femaleZodiac" required>
+                        <option value="">请选择</option>
+                        <option value="鼠">鼠</option>
+                        <option value="牛">牛</option>
+                        <option value="虎">虎</option>
+                        <option value="兔">兔</option>
+                        <option value="龙">龙</option>
+                        <option value="蛇">蛇</option>
+                        <option value="马">马</option>
+                        <option value="羊">羊</option>
+                        <option value="猴">猴</option>
+                        <option value="鸡">鸡</option>
+                        <option value="狗">狗</option>
+                        <option value="猪">猪</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">开始配对</button>
+            </form>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="match-score">
+                <div class="score-number" id="score">92</div>
+                <div class="score-text">缘分指数</div>
+            </div>
+
+            <div class="analysis-section">
+                <h3>🎯 配对分析</h3>
+                <p id="analysis">你们的八字相合度很高，属于上等婚配。性格互补，能够互相包容理解。男方稳重踏实，女方温柔体贴，是天作之合。</p>
+            </div>
+
+            <div class="analysis-section">
+                <h3>💕 感情建议</h3>
+                <p id="loveAdvice">你们的感情基础很好，建议多沟通交流，共同规划未来。婚后生活会比较和谐，但要注意财务方面的协调。</p>
+            </div>
+
+            <div class="analysis-section">
+                <h3>⚠️ 注意事项</h3>
+                <p id="warning">虽然整体配对很好，但也要注意：男方有时过于固执，女方偶尔情绪化，需要互相体谅。建议避开农历三月和九月做重大决定。</p>
+            </div>
+
+            <div class="paywall" id="paywall">
+                <h3>🎁 免费体验版</h3>
+                <p>您正在使用免费体验，已显示基础配对分析</p>
+                <p style="margin: 15px 0; color: var(--muted);">升级VIP查看详细合婚报告，包含：</p>
+                <p style="color: var(--muted);">• 八字详细合婚分析<br>• 婚后运势预测<br>• 最佳结婚时间<br>• 化解建议</p>
+                <button class="btn-vip" onclick="showPayment()" style="margin-top: 20px;">升级VIP查看完整版</button>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 天道元一科技有限公司 | 客服：180-5812-5388</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('matchingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 生成随机配对分数
+            const score = 75 + Math.floor(Math.random() * 20);
+            document.getElementById('score').textContent = score;
+            
+            // 根据分数生成分析
+            let analysis, advice, warning;
+            if (score >= 90) {
+                analysis = "天作之合！你们的八字非常相合，缘分深厚。性格互补，价值观相近，是难得的好姻缘。";
+                advice = "珍惜这段缘分，多沟通交流，共同规划未来。婚后生活会非常和谐美满。";
+                warning = "虽然配对很好，但也要注意保持独立性，给彼此适当的空间。";
+            } else if (score >= 80) {
+                analysis = "配对良好！你们的八字相合度较高，有较好的感情基础。性格虽有差异，但能互相包容。";
+                advice = "多理解对方的想法，学会换位思考。感情需要经营，多创造共同回忆。";
+                warning = "注意沟通方式，避免冷战。财务方面要提前做好规划。";
+            } else {
+                analysis = "配对一般。你们的八字有一些相冲之处，需要更多包容和理解。";
+                advice = "感情需要双方共同努力，多沟通多理解。可以考虑通过一些方式化解。";
+                warning = "需要特别注意相处方式，避免冲动做决定。建议咨询专业命理师。";
+            }
+            
+            document.getElementById('analysis').textContent = analysis;
+            document.getElementById('loveAdvice').textContent = advice;
+            document.getElementById('warning').textContent = warning;
+            
+            document.getElementById('inputForm').style.display = 'none';
+            document.getElementById('resultSection').classList.add('active');
+        });
+
+        function showPayment() {
+            alert('感谢您的支持！\n\n请联系客服完成支付：\n电话：180-5812-5388\n微信：80506070\n\n支付后无限次使用所有功能！');
+        }
+    </script>
+</body>
+</html>

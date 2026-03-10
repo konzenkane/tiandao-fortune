@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事业前程 - 天道元一</title>
+    <style>
+        :root { --gold: #FFD700; --dark: #0a0a0f; --text: #f0f0f0; --muted: #888; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "Microsoft YaHei", serif; background: var(--dark); color: var(--text); }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; padding: 30px 0; border-bottom: 2px solid var(--gold); }
+        .back { color: var(--gold); text-decoration: none; display: block; margin-bottom: 20px; }
+        h1 { color: var(--gold); font-size: 2rem; }
+        .form-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,215,0,0.3); border-radius: 20px; padding: 30px; margin: 30px 0; }
+        .form-group { margin-bottom: 25px; }
+        label { display: block; color: var(--gold); margin-bottom: 10px; font-size: 1.1rem; }
+        input, select { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,215,0,0.3); border-radius: 10px; color: var(--text); font-size: 1rem; }
+        .submit-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--gold), #FFA500); color: #000; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        .result-section { display: none; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,215,0,0.3); border-radius: 20px; padding: 30px; margin-top: 30px; }
+        .result-section.active { display: block; }
+        .career-score { text-align: center; padding: 30px; background: rgba(255,215,0,0.1); border-radius: 15px; margin-bottom: 30px; }
+        .score-number { font-size: 3rem; color: var(--gold); font-weight: bold; }
+        .score-label { color: var(--muted); margin-top: 10px; }
+        .direction-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 30px 0; }
+        .direction-item { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; text-align: center; }
+        .direction-item h4 { color: var(--gold); margin-bottom: 10px; }
+        .direction-item p { color: var(--muted); }
+        .analysis-section { margin: 20px 0; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+        .analysis-section h3 { color: var(--gold); margin-bottom: 10px; }
+        .analysis-section p { color: var(--muted); line-height: 1.8; }
+        .paywall { text-align: center; padding: 30px; background: rgba(255,215,0,0.1); border-radius: 15px; margin-top: 30px; }
+        .paywall h3 { color: var(--gold); margin-bottom: 15px; }
+        .btn-vip { background: linear-gradient(135deg, var(--gold), #FFA500); color: #000; padding: 15px 40px; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+        footer { text-align: center; padding: 40px 0; border-top: 1px solid rgba(255,215,0,0.2); color: var(--muted); margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back">← 返回首页</a>
+            <h1>💼 事业前程</h1>
+            <p style="color: var(--muted); margin-top: 10px;">事业运势 · 发展方向 · 机遇把握</p>
+        </header>
+
+        <div class="form-card" id="inputForm">
+            <form id="careerForm">
+                <div class="form-group">
+                    <label>您的姓名</label>
+                    <input type="text" id="name" placeholder="请输入姓名" required>
+                </div>
+                <div class="form-group">
+                    <label>出生日期</label>
+                    <input type="date" id="birthDate" required>
+                </div>
+                <div class="form-group">
+                    <label>当前职业</label>
+                    <select id="career" required>
+                        <option value="">请选择</option>
+                        <option value="技术">技术/IT</option>
+                        <option value="销售">销售/市场</option>
+                        <option value="管理">管理/行政</option>
+                        <option value="金融">金融/财务</option>
+                        <option value="教育">教育/培训</option>
+                        <option value="医疗">医疗/健康</option>
+                        <option value="艺术">艺术/设计</option>
+                        <option value="创业">创业/自由职业</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>想了解的时间范围</label>
+                    <select id="timeRange">
+                        <option value="current">当前运势</option>
+                        <option value="year">今年运势</option>
+                        <option value="future">未来三年</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">测算事业运</button>
+            </form>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="career-score">
+                <div class="score-number" id="score">88</div>
+                <div class="score-label">事业运势指数</div>
+            </div>
+
+            <div class="direction-grid">
+                <div class="direction-item">
+                    <h4>🎯 适合行业</h4>
+                    <p id="industry">科技、金融、教育</p>
+                </div>
+                <div class="direction-item">
+                    <h4>📍 吉利方位</h4>
+                    <p id="direction">东南、正南</p>
+                </div>
+                <div class="direction-item">
+                    <h4>🎨 幸运颜色</h4>
+                    <p id="color">金色、蓝色</p>
+                </div>
+                <div class="direction-item">
+                    <h4>🔢 幸运数字</h4>
+                    <p id="number">6、8、9</p>
+                </div>
+            </div>
+
+            <div class="analysis-section">
+                <h3>📈 事业分析</h3>
+                <p id="analysis">您的事业运势正处于上升期，今年有重要的发展机会。适合在技术领域深耕，或者考虑向管理岗位转型。3-5月是关键的转折期，要把握好机会。</p>
+            </div>
+
+            <div class="analysis-section">
+                <h3>💡 发展建议</h3>
+                <p id="advice">建议多学习新技能，提升自己的竞争力。可以考虑拓展人脉，参加行业交流活动。下半年有贵人相助，适合主动争取机会。</p>
+            </div>
+
+            <div class="analysis-section">
+                <h3>⚠️ 注意事项</h3>
+                <p id="warning">注意与同事的关系，避免办公室政治。财务方面要谨慎，不宜大额投资。健康方面要注意劳逸结合。</p>
+            </div>
+
+            <div class="paywall" id="paywall">
+                <h3>🎁 免费体验版</h3>
+                <p>您正在使用免费体验，已显示基础事业分析</p>
+                <p style="margin: 15px 0; color: var(--muted);">升级VIP查看详细报告，包含：</p>
+                <p style="color: var(--muted);">• 流年事业运势<br>• 最佳跳槽时机<br>• 创业建议<br>• 贵人方位<br>• 详细化解方案</p>
+                <button class="btn-vip" onclick="showPayment()" style="margin-top: 20px;">升级VIP查看完整版</button>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 天道元一科技有限公司 | 客服：180-5812-5388</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('careerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 生成随机事业分数
+            const score = 70 + Math.floor(Math.random() * 25);
+            document.getElementById('score').textContent = score;
+            
+            // 根据分数生成分析
+            let analysis, advice, warning;
+            if (score >= 85) {
+                analysis = "您的事业运势极佳，正处于上升期。今年有重要的发展机会，可能获得升职加薪。适合主动争取，大胆表现自己。";
+                advice = "把握机会，展现才能。可以考虑承担更多责任，或者寻求新的发展平台。贵人运旺，多参加社交活动。";
+                warning = "虽然运势好，但也要注意低调，避免树敌。不要骄傲自满，保持谦虚态度。";
+            } else if (score >= 75) {
+                analysis = "您的事业运势良好，稳步发展。虽然没有大的突破，但基础扎实，适合稳扎稳打。";
+                advice = "继续积累经验，提升专业能力。可以适当拓展人脉，为未来发展做准备。下半年机会更多。";
+                warning = "注意与同事的关系，避免卷入办公室政治。财务方面要稳健，不宜冒险。";
+            } else {
+                analysis = "您的事业运势一般，可能会遇到一些挑战。需要更多耐心和努力，不要急于求成。";
+                advice = "稳扎稳打，提升自身能力。可以考虑学习新技能，增加竞争力。等待时机，不要轻举妄动。";
+                warning = "注意人际关系，避免冲突。财务要谨慎，不宜大额投资。健康方面要注意休息。";
+            }
+            
+            document.getElementById('analysis').textContent = analysis;
+            document.getElementById('advice').textContent = advice;
+            document.getElementById('warning').textContent = warning;
+            
+            document.getElementById('inputForm').style.display = 'none';
+            document.getElementById('resultSection').classList.add('active');
+        });
+
+        function showPayment() {
+            alert('感谢您的支持！\n\n请联系客服完成支付：\n电话：180-5812-5388\n微信：80506070\n\n支付后无限次使用所有功能！');
+        }
+    </script>
+</body>
+</html>

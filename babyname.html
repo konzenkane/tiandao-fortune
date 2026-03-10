@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新生儿起名 - 天道元一</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #FFD700;
+            --primary-crimson: #C41E3A;
+            --dark-bg: #0a0a0f;
+            --card-bg: rgba(20, 20, 30, 0.95);
+            --text-light: #f0f0f0;
+            --text-muted: #888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary-gold);
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--primary-gold);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+        }
+
+        .form-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: var(--primary-gold);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .gender-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .gender-option {
+            flex: 1;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .gender-option:hover, .gender-option.selected {
+            border-color: var(--primary-gold);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .datetime-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .price-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .price-option {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .price-option:hover, .price-option.selected {
+            border-color: var(--primary-gold);
+            background: rgba(255, 215, 0, 0.15);
+        }
+
+        .price-amount {
+            font-size: 1.3rem;
+            color: var(--primary-gold);
+            font-weight: 700;
+        }
+
+        .price-meaning {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary-gold), #FFA500);
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .result-section {
+            display: none;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .result-section.active {
+            display: block;
+        }
+
+        .bazi-display {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .bazi-title {
+            color: var(--primary-gold);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .bazi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .bazi-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .bazi-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .bazi-value {
+            color: var(--primary-gold);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .wuxing-section {
+            margin: 30px 0;
+        }
+
+        .wuxing-title {
+            color: var(--primary-gold);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .wuxing-chart {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .wuxing-item {
+            text-align: center;
+        }
+
+        .wuxing-name {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .wuxing-jin { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
+        .wuxing-mu { background: linear-gradient(135deg, #4CAF50, #2E7D32); color: #fff; }
+        .wuxing-shui { background: linear-gradient(135deg, #2196F3, #1565C0); color: #fff; }
+        .wuxing-huo { background: linear-gradient(135deg, #f44336, #c62828); color: #fff; }
+        .wuxing-tu { background: linear-gradient(135deg, #8D6E63, #5D4037); color: #fff; }
+
+        .wuxing-count {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .xiyongshen {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid #4CAF50;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .xiyongshen-title {
+            color: #4CAF50;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .xiyongshen-content {
+            font-size: 1.5rem;
+            color: var(--primary-gold);
+            font-weight: bold;
+        }
+
+        .name-suggestions {
+            margin-top: 30px;
+        }
+
+        .name-suggestions h3 {
+            color: var(--primary-gold);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .name-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .name-item {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .name-item:hover {
+            border-color: var(--primary-gold);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .name-text {
+            font-size: 1.5rem;
+            color: var(--primary-gold);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .name-meaning {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .name-score {
+            margin-top: 10px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .paywall {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(196, 30, 58, 0.1));
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .paywall h3 {
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .datetime-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .price-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .bazi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">← 返回首页</a>
+            <h1>新生儿起名</h1>
+            <p class="subtitle">根据生辰八字，为宝宝取一个吉祥好名</p>
+        </header>
+
+        <div class="form-card" id="inputForm">
+            <form id="babyForm">
+                <div class="form-group">
+                    <label>宝宝姓氏</label>
+                    <input type="text" id="surname" placeholder="请输入姓氏" required>
+                </div>
+
+                <div class="form-group">
+                    <label>宝宝性别</label>
+                    <div class="gender-group">
+                        <div class="gender-option" onclick="selectGender('男')">男宝</div>
+                        <div class="gender-option" onclick="selectGender('女')">女宝</div>
+                    </div>
+                    <input type="hidden" id="gender" required>
+                </div>
+
+                <div class="form-group">
+                    <label>出生日期（阳历）</label>
+                    <div class="datetime-row">
+                        <select id="year" required>
+                            <option value="">年</option>
+                        </select>
+                        <select id="month" required>
+                            <option value="">月</option>
+                        </select>
+                        <select id="day" required>
+                            <option value="">日</option>
+                        </select>
+                        <select id="hour" required>
+                            <option value="">时</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>父母期望（可多选）</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                            <input type="checkbox" name="expect" value="聪明"> 聪明智慧
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                            <input type="checkbox" name="expect" value="健康"> 健康平安
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                            <input type="checkbox" name="expect" value="富贵"> 富贵荣华
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                            <input type="checkbox" name="expect" value="文雅"> 文雅有才
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>🙏 随喜付费</label>
+                    <div class="price-options">
+                        <div class="price-option" onclick="selectPrice(0.88)">
+                            <div class="price-amount">¥0.88</div>
+                            <div class="price-meaning">发财</div>
+                        </div>
+                        <div class="price-option selected" onclick="selectPrice(8.8)">
+                            <div class="price-amount">¥8.8</div>
+                            <div class="price-meaning">顺利</div>
+                        </div>
+                        <div class="price-option" onclick="selectPrice(88)">
+                            <div class="price-amount">¥88</div>
+                            <div class="price-meaning">大发</div>
+                        </div>
+                        <div class="price-option" onclick="selectPrice(888)">
+                            <div class="price-amount">¥888</div>
+                            <div class="price-meaning">暴富</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="selectedPrice" value="8.8">
+                </div>
+
+                <button type="submit" class="submit-btn">为宝宝起名</button>
+            </form>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="bazi-display">
+                <div class="bazi-title">宝宝八字命盘</div>
+                <div class="bazi-grid" id="baziGrid"></div>
+            </div>
+
+            <div class="wuxing-section">
+                <div class="wuxing-title">五行分析</div>
+                <div class="wuxing-chart">
+                    <div class="wuxing-item">
+                        <div class="wuxing-name wuxing-jin">金</div>
+                        <div class="wuxing-count" id="jinCount">2个</div>
+                    </div>
+                    <div class="wuxing-item">
+                        <div class="wuxing-name wuxing-mu">木</div>
+                        <div class="wuxing-count" id="muCount">1个</div>
+                    </div>
+                    <div class="wuxing-item">
+                        <div class="wuxing-name wuxing-shui">水</div>
+                        <div class="wuxing-count" id="shuiCount">2个</div>
+                    </div>
+                    <div class="wuxing-item">
+                        <div class="wuxing-name wuxing-huo">火</div>
+                        <div class="wuxing-count" id="huoCount">1个</div>
+                    </div>
+                    <div class="wuxing-item">
+                        <div class="wuxing-name wuxing-tu">土</div>
+                        <div class="wuxing-count" id="tuCount">2个</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="xiyongshen">
+                <div class="xiyongshen-title">喜用神分析</div>
+                <div class="xiyongshen-content" id="xiyongshen">喜用神：木、火<br>忌神：金、水</div>
+            </div>
+
+            <div class="name-suggestions">
+                <h3>🎁 推荐好名（前3个免费）</h3>
+                <div class="name-list" id="nameList"></div>
+            </div>
+
+            <div class="paywall" id="paywall">
+                <h3>🎁 免费体验版</h3>
+                <p>您正在使用免费体验，已显示基础分析</p>
+                <div style="background: rgba(76, 175, 80, 0.1); border: 1px solid #4CAF50; border-radius: 10px; padding: 15px; margin: 15px 0;">
+                    <p style="color: #4CAF50; margin: 0;">✓ 八字排盘（免费）</p>
+                    <p style="color: #4CAF50; margin: 5px 0 0 0;">✓ 五行分析（免费）</p>
+                    <p style="color: #4CAF50; margin: 5px 0 0 0;">✓ 3个推荐名字（免费）</p>
+                    <p style="color: var(--text-muted); margin: 5px 0 0 0;">✗ 20个精选名字（VIP）</p>
+                    <p style="color: var(--text-muted); margin: 5px 0 0 0;">✗ 名字详细解析（VIP）</p>
+                    <p style="color: var(--text-muted); margin: 5px 0 0 0;">✗ 大师定制建议（VIP）</p>
+                </div>
+                <p style="margin-top: 15px;">升级VIP查看20个精选好名及详细解析</p>
+                <button class="submit-btn" onclick="showPayment()">升级VIP查看更多名字</button>
+                <p style="margin-top: 15px; color: var(--text-muted); font-size: 0.9rem;">🙏 随喜付费，心诚则灵</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 初始化选项
+        const yearSelect = document.getElementById('year');
+        const currentYear = new Date().getFullYear();
+        for (let i = currentYear; i >= 2020; i--) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i + '年';
+            yearSelect.appendChild(option);
+        }
+
+        const monthSelect = document.getElementById('month');
+        for (let i = 1; i <= 12; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i + '月';
+            monthSelect.appendChild(option);
+        }
+
+        const daySelect = document.getElementById('day');
+        for (let i = 1; i <= 31; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i + '日';
+            daySelect.appendChild(option);
+        }
+
+        const hourSelect = document.getElementById('hour');
+        const hours = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+        hours.forEach((h, i) => {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = h + '时';
+            hourSelect.appendChild(option);
+        });
+
+        function selectGender(gender) {
+            document.getElementById('gender').value = gender;
+            document.querySelectorAll('.gender-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+        }
+
+        function selectPrice(price) {
+            document.getElementById('selectedPrice').value = price;
+            document.querySelectorAll('.price-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+        }
+
+        // 名字库
+        const boyNames = [
+            { name: '子轩', meaning: '器宇轩昂，才华横溢', score: 98 },
+            { name: '浩然', meaning: '浩然正气，光明磊落', score: 97 },
+            { name: '博文', meaning: '博学多才，文采斐然', score: 96 },
+            { name: '俊杰', meaning: '英俊杰出，才华出众', score: 95 },
+            { name: '睿哲', meaning: '睿智明哲，聪慧过人', score: 94 },
+            { name: '嘉懿', meaning: '嘉言懿行，品德高尚', score: 93 },
+            { name: '泽宇', meaning: '泽被万物，气宇不凡', score: 92 },
+            { name: '明远', meaning: '明智远见，目光长远', score: 91 }
+        ];
+
+        const girlNames = [
+            { name: '诗涵', meaning: '诗情画意，涵养深厚', score: 98 },
+            { name: '雅琪', meaning: '优雅高贵，琪花瑶草', score: 97 },
+            { name: '梦瑶', meaning: '梦寐以求，瑶池仙子', score: 96 },
+            { name: '欣怡', meaning: '欣欣向荣，怡然自得', score: 95 },
+            { name: '雨萱', meaning: '雨润万物，萱草忘忧', score: 94 },
+            { name: '思琪', meaning: '才思敏捷，琪玉无瑕', score: 93 },
+            { name: '佳怡', meaning: '佳人怡然，美好愉悦', score: 92 },
+            { name: '婉清', meaning: '温婉清雅，气质脱俗', score: 91 }
+        ];
+
+        document.getElementById('babyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const surname = document.getElementById('surname').value;
+            const gender = document.getElementById('gender').value;
+            const year = parseInt(document.getElementById('year').value);
+            
+            // 生成八字
+            const gan = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+            const zhi = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+            
+            const baziData = [
+                { label: '年柱', value: gan[(year - 4) % 10] + zhi[(year - 4) % 12] },
+                { label: '月柱', value: gan[Math.floor(Math.random() * 10)] + zhi[Math.floor(Math.random() * 12)] },
+                { label: '日柱', value: gan[Math.floor(Math.random() * 10)] + zhi[Math.floor(Math.random() * 12)] },
+                { label: '时柱', value: gan[Math.floor(Math.random() * 10)] + zhi[Math.floor(Math.random() * 12)] }
+            ];
+
+            document.getElementById('baziGrid').innerHTML = baziData.map(item => `
+                <div class="bazi-item">
+                    <div class="bazi-label">${item.label}</div>
+                    <div class="bazi-value">${item.value}</div>
+                </div>
+            `).join('');
+
+            // 生成名字
+            const names = gender === '男' ? boyNames : girlNames;
+            const shuffled = names.sort(() => 0.5 - Math.random()).slice(0, 3);
+            
+            document.getElementById('nameList').innerHTML = shuffled.map(item => `
+                <div class="name-item">
+                    <div class="name-text">${surname}${item.name}</div>
+                    <div class="name-meaning">${item.meaning}</div>
+                    <div class="name-score">评分：${item.score}分</div>
+                </div>
+            `).join('');
+
+            document.getElementById('inputForm').style.display = 'none';
+            document.getElementById('resultSection').classList.add('active');
+        });
+
+        function showPayment() {
+            const price = document.getElementById('selectedPrice').value;
+            alert(`感谢您的随喜支持！\n\n支付金额：¥${price}\n\n请联系客服完成支付：\n电话：180-5812-5388\n微信：80506070`);
+        }
+    </script>
+</body>
+</html>
